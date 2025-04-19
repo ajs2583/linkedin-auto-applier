@@ -41,6 +41,7 @@ chrome_options.add_experimental_option("detach", True)
 driver = webdriver.Chrome(options=chrome_options)
 wait = WebDriverWait(driver, 10)
 
+
 # ─── Helper: Abort Application ──────────────────────────────────────────────────
 def abort_application():
     try:
@@ -56,16 +57,19 @@ def abort_application():
     except Exception as e:
         print("Error during abort:", e)
 
+
 # ─── Main Job Application Logic ─────────────────────────────────────────────────
 def apply_to_jobs():
     job_cards = wait.until(EC.presence_of_all_elements_located(SELECTOR_JOB_LISTINGS))
 
     for i in range(len(job_cards)):
         try:
-            job_cards = wait.until(EC.presence_of_all_elements_located(SELECTOR_JOB_LISTINGS))
+            job_cards = wait.until(
+                EC.presence_of_all_elements_located(SELECTOR_JOB_LISTINGS)
+            )
             job = job_cards[i]
             print(f"Clicking job {i + 1}: {job.text.strip().splitlines()[0]}")
-            
+
             try:
                 overlay = driver.find_element(*SELECTOR_MODAL_OVERLAY)
                 if overlay.is_displayed():
@@ -77,12 +81,16 @@ def apply_to_jobs():
             driver.execute_script("arguments[0].scrollIntoView();", job)
             job.click()
 
-            easy_apply_btn = wait.until(EC.element_to_be_clickable(SELECTOR_EASY_APPLY_BTN))
+            easy_apply_btn = wait.until(
+                EC.element_to_be_clickable(SELECTOR_EASY_APPLY_BTN)
+            )
             easy_apply_btn.click()
             print("Clicked Easy Apply")
 
             try:
-                phone_input = wait.until(EC.presence_of_element_located(SELECTOR_PHONE_INPUT))
+                phone_input = wait.until(
+                    EC.presence_of_element_located(SELECTOR_PHONE_INPUT)
+                )
                 if phone_input.get_attribute("value").strip() == "":
                     phone_input.send_keys(PHONE)
                     print("Phone number filled.")
@@ -103,7 +111,9 @@ def apply_to_jobs():
                         print("Clicked Review")
 
                         try:
-                            submit_btn = wait.until(EC.element_to_be_clickable(SELECTOR_SUBMIT_BTN))
+                            submit_btn = wait.until(
+                                EC.element_to_be_clickable(SELECTOR_SUBMIT_BTN)
+                            )
                             submit_btn.click()
                             print("Application submitted.")
                             break
@@ -144,6 +154,7 @@ def apply_to_jobs():
             abort_application()
             continue
 
+
 # ─── Login and Start ────────────────────────────────────────────────────────────
 def main():
     try:
@@ -153,8 +164,12 @@ def main():
         sign_in_btn = wait.until(EC.presence_of_element_located(SELECTOR_SIGN_IN_BTN))
         sign_in_btn.click()
 
-        username_input = wait.until(EC.presence_of_element_located(SELECTOR_USERNAME_FIELD))
-        password_input = wait.until(EC.presence_of_element_located(SELECTOR_PASSWORD_FIELD))
+        username_input = wait.until(
+            EC.presence_of_element_located(SELECTOR_USERNAME_FIELD)
+        )
+        password_input = wait.until(
+            EC.presence_of_element_located(SELECTOR_PASSWORD_FIELD)
+        )
 
         username_input.send_keys(USER_NAME)
         password_input.send_keys(PW)
@@ -164,6 +179,7 @@ def main():
 
     finally:
         driver.quit()
+
 
 # ─── Entry Point ────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
