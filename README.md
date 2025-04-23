@@ -21,6 +21,7 @@ This Python script automates the LinkedIn "Easy Apply" job application process u
 ```bash
 git clone https://github.com/yourusername/linkedin-auto-applier.git
 cd linkedin-auto-applier
+pip install -r requirements.txt
 ```
 
 ### 2. Install dependencies
